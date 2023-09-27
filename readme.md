@@ -1,6 +1,8 @@
 # Renogy Solar Controller Exporter
 
-Start server: `pipenv run python3 ./solar-cli.py`
+Start server: `pipenv run python3 ./main.py`
+
+NOTE: Will only run on Linux because `gatt` only has files for Linux platforms, it returns noops on other platforms.
 
 ## Installing
 
@@ -42,6 +44,13 @@ battery_type: 'sealed',
 - `alias`: String
 
 ## Docker
+
+### Build
+
+`docker build -t ghcr.io/macrofig/renogy-solar-exporter .`
+`docker images`
+`docker tag <latest> ghcr.io/macrofig/renogy-solar-exporter:latest`
+`docker push ghcr.io/macrofig/renogy-solar-exporter:latest`
 
 ## TODO
 

@@ -4,7 +4,7 @@ import os
 import sys
 from renogybt import RoverClient
 from flask import Flask
-from prometheus_client import Gauge, Summary, generate_latest
+from prometheus_client import Enum, Gauge, Summary, generate_latest
 
 app = Flask(__name__)
 
@@ -46,8 +46,11 @@ power_consumption_today = Gauge(
 power_generation_total = Gauge(
     "power_generation_total", "Total power generated in watts"
 )
+connection_status = Enum('connection_status', 'Status of connection between monitor and bluetooth radio',
+        states=['starting', 'connected', 'disconnected', 'not_found'])
 
-logging.basicConfig(level=logging.WARNING)
+# logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.DEBUG)
 
 config_file = sys.argv.get[1] if len(sys.argv) > 1 else "config.ini"
 config_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), config_file)
@@ -58,16 +61,19 @@ config.read(config_path)
 def on_data_received(client, data):
     logging.debug("{} => {}".format(client.device.alias(), data))
     battery_percentage.set(data.battery_percentage)
+    connection_status.state('connected')
     client.disconnect()
 
 
 @app.route("/metrics")
 @REQUEST_TIME.time()
 def metrics():
+    connection_status.state('starting')
     try:
         RoverClient(config, on_data_received).connect()
-    except:
-        logging.warning("It broke")
+    except Exception as e:
+        connection_status.state('not_found')
+        logging.warning(f"Exception occured: {e}")
         pass
 
     return generate_latest()
@@ -78,8 +84,8 @@ def health():
     # TODO: Only attempt to connect if a mac address was passed
     try:
         RoverClient(config).connect()
-    except:
-        logging.warning("It broke")
+    except Exception as e:
+        logging.warning(f"Exception occured: {e}")
         return "NOT FOUND"
 
     return "AVAILABLE"
@@ -99,4 +105,4 @@ def index():
 
 if __name__ == "__main__":
     # TODO Make port configurable
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=9030)
