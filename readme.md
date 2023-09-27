@@ -43,14 +43,18 @@ battery_type: 'sealed',
 - `mac_addr`: String
 - `alias`: String
 
-## Docker
 
-### Build
+## Build
 
+### Docker
 `docker build -t ghcr.io/macrofig/renogy-solar-exporter .`
 `docker images`
 `docker tag <latest> ghcr.io/macrofig/renogy-solar-exporter:latest`
 `docker push ghcr.io/macrofig/renogy-solar-exporter:latest`
+
+### Pi
+
+`sudo apt install python3-pip python3-dbus`
 
 ## TODO
 
