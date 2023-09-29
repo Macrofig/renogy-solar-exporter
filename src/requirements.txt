@@ -1,0 +1,15 @@
+# Needed for dbus
+pycairo
+PyGObject
+
+# Needed for gatt
+dbus-python
+
+# Needed for renogybt
+requests
+gatt
+paho.mqtt
+
+# Needed for main.py
+flask
+prometheus_client
