@@ -42,10 +42,11 @@ connection_status: 'starting', 'connected', 'disconnected', 'not_found'
 - `mac_addr`: String
 - `alias`: String
 
-
 ## Build
 
 ### Docker
+
+`echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin`
 `docker build -t ghcr.io/macrofig/renogy-solar-exporter .`
 `docker push ghcr.io/macrofig/renogy-solar-exporter:latest`
 
