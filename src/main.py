@@ -68,7 +68,7 @@ def on_data_received(client, data):
     battery_voltage.set(data.get('battery_voltage'))
     battery_current.set(data.get('battery_current'))
     battery_temperature.set(data.get('battery_temperature'))
-    battery_type.set(data.get('battery_type'))
+    battery_type.state(data.get('battery_type'))
     controller_temperature.set(data.get('controller_temperature'))
     load_status.state(data.get('load_status'))
     load_voltage.set(data.get('load_voltage'))
